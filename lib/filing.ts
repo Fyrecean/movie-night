@@ -49,6 +49,10 @@ export const readWeekData = async (weekNumber: number, lock: boolean): Promise<I
             }
             fs.writeFileSync(lockFilePath, ''); // Create an empty lock file
         }
+        if (!fs.existsSync(filePath)) {
+            const data = { weekNumber: weekNumber, users: []}
+            fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+        }
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const data = JSON.parse(fileContents);
 
