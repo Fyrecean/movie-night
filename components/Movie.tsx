@@ -15,7 +15,7 @@ export const Movie = ({ children, movie, isSearch }: MovieProps) => {
             <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} style={{ width: '75px', height: 'auto' }} />
         </div>
         <div className="movieTitle">
-            <h3 className="text-xl font-bold">{movie.title}</h3>
+            <h3 className="text-l font-bold">{movie.title}</h3>
             <p>({new Date(movie.release_date).getFullYear()})</p>
             {children}
         </div>

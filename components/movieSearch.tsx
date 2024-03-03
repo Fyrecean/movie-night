@@ -38,6 +38,7 @@ export const MovieSearch = ({refreshReservations}: IMovieSearchProps) => {
 
     return (
         <div>
+            <h1 className="text-xl font-bold">Suggest a Movie</h1>
             <input
                 type="text"
                 placeholder="Search for a movie..."

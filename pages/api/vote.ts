@@ -1,4 +1,5 @@
 import { ensureDataDirectory, getCurrentWeekNumber, readWeekData, writeWeekData } from "@/lib/filing";
+import { IVote } from "@/lib/types";
 import { parse } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 import { promisify } from "util";
@@ -14,7 +15,7 @@ const vote = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!phoneNumber) {
         return res.status(403).json({ error: 'Unauthorized' });
     }
-    const { movieId, upOrDown } = req.body;
+    const { movieId, isAdd } = req.body as IVote;
 
     ensureDataDirectory();
     const weekNumber = getCurrentWeekNumber();
@@ -27,24 +28,21 @@ const vote = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400).json({ error: 'Movie not found' });
     }
     const user = weekData.users[recommendationIndex];
-    if (upOrDown === 'up') {
+    if (isAdd) {
         if (!user.upvotes) {
             user.upvotes = [];
         }
-
-        user.downvotes = user.downvotes.filter((vote) => vote !== phoneNumber);
         if (!user.upvotes.includes(phoneNumber)) {
             user.upvotes.push(phoneNumber);
         }
+
+        //user.downvotes = user.downvotes.filter((vote) => vote !== phoneNumber);
     } else {
-        if (!user.downvotes) {
-            user.downvotes = [];
+        if (!user.upvotes) {
+            user.upvotes = [];
         }
         
         user.upvotes = user.upvotes.filter((vote) => vote !== phoneNumber);
-        if (!user.downvotes.includes(phoneNumber)) {
-            user.downvotes.push(phoneNumber);
-        }
     }
     const success = await writeWeekData(weekNumber, weekData);
     if (success) {

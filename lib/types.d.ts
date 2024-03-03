@@ -24,7 +24,7 @@ export interface IWeekData {
 
 interface IMovieRecommendation {
     movie: IMovie;
-    myVote: voteType | null;
+    userHasVoted: boolean;
     upvotes: number;
     downvotes: number;
 }
@@ -38,5 +38,5 @@ export interface IReservations {
 export type voteType = 'up' | 'down';
 export interface IVote {
     movieId: number;
-    upOrDown: voteType;
+    isAdd: boolean;
 }

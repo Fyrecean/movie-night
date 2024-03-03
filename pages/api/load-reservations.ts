@@ -34,7 +34,7 @@ const loadReservations = async (req: NextApiRequest, res: NextApiResponse) => {
         if (user.movieRecommendation) {
             const rec: IMovieRecommendation = {
                 movie: user.movieRecommendation,
-                myVote: user.upvotes.includes(phoneNumber) ? 'up' : user.downvotes.includes(phoneNumber) ? 'down' : null,
+                userHasVoted: user.upvotes.includes(phoneNumber),
                 upvotes: user.upvotes.length,
                 downvotes: user.downvotes.length,
             }
