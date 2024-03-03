@@ -30,9 +30,10 @@ export const Reservations = ({ refreshReservations, rsvped, attendeeNames, recom
 
     const areMoviesRecommended = recommendations.length > 0;
     const movieListTitle = rsvped ? "Vote on this Week's Suggested Movies" : "This Week's Suggested Movies";
+    const attendeesTitle = "This Week's Attendees";
     return (
         <div>
-            <h1 className="text-xl font-bold">This Week's Attendees</h1>
+            <h1 className="text-xl font-bold">{attendeesTitle}</h1>
             <ul>
                 {attendeeNames.length === 0 ? <li>No attendees yet</li> : attendeesList}
             </ul>

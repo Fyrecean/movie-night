@@ -19,7 +19,7 @@ export const MovieSearch = ({refreshReservations}: IMovieSearchProps) => {
     useEffect(() => {
         if (!query) return;
         debouncedSearch(query);
-    }, [query]);
+    }, [query,debouncedSearch]);
 
     const handleSelectMovie = async (movie: IMovie) => {
         const response = await fetch('/api/save-recommendation', {
