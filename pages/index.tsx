@@ -65,6 +65,9 @@ const Home = () => {
             {!phoneNumber ? <Login onLogin={handleLogin}/> :
                 <div>
                     <h1 className="text-xl font-bold">Welcome {name} to the Movie Night Reservationinator!</h1>
+<p className="text-base">Doors open at 6:30 every Monday until April 1st.</p>
+<p className="text-base">Movie starts at 7:00 sharp!</p>
+<p className="text-base .italic">Address: 6922 East Pass Apt 204</p>
                     <RSVP rsvped={rsvped} onRSVP={handleRSVP}/>
                     <Reservations
                         refreshReservations={fetchReservations} 

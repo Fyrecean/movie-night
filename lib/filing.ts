@@ -5,10 +5,10 @@ import { promisify } from 'util';
 import { IWeekData } from './types';
 const sleep = promisify(setTimeout);
 
-const usersFilePath = path.join(process.cwd(), 'data', 'users.json');
 
 export const isValidPhoneNumber = (phoneNumber: string): [boolean, string] => {
     // Read the users data from the JSON file
+  const usersFilePath = path.join(process.cwd(), 'data', 'users.json');
   const usersData = JSON.parse(fs.readFileSync(usersFilePath, 'utf-8'));
 
   // Check if phoneNumber is a 10-character string of numbers and is contained in usersData
