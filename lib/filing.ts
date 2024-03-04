@@ -31,11 +31,14 @@ export const isUserRSVPed = async (phoneNumber: string) => {
 
 // Return a the current week number, incrementing on mondays since 2/19/2024  (week 1)
 export const getCurrentWeekNumber = (): number => {
-    const currentDate = new Date();
-    const startDate = new Date('2024-02-19');
-    const daysSinceStart = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    return Math.floor(daysSinceStart / 7) + 1;
+    return getWeekNumber(new Date());
 };
+
+export const getWeekNumber = (now: Date): number => {
+    const startDate = new Date('2024-02-19T20:00:00');
+    const daysSinceStart = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    return Math.floor(daysSinceStart / 7) + 1;
+}
 
 // File reading utility
 export const readWeekData = async (weekNumber: number, lock: boolean): Promise<IWeekData | null> => {
