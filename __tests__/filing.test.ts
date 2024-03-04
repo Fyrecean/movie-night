@@ -20,4 +20,8 @@ describe('getWeekNumber', () => {
 
     // Add more test cases for dates and times immediately after 2024-02-26 at 8pm
   });
+//   it('right now is week 2', () => {
+//     const date1 = new Date('2024-03-04T20:00:00');
+//     expect(getWeekNumber(date1)).toBe(2);
+//   });
 });
