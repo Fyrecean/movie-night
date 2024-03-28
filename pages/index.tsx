@@ -88,9 +88,8 @@ const Home = () => {
         <div className="container mx-auto">
             {!phoneNumber ? <Login onLogin={handleLogin}/> :
                 <div>
-                    <h1 className="text-xl font-bold">Welcome, {name}, to Carter's Movie Night Reservationinator!</h1>
-<p className="text-base">Come April 1st to movie night.</p>
-<p className="text-base">Doors open at 6:30, movie starts at 7:00!</p>
+                    <h1 className="text-xl font-bold">Welcome, {name}, to Carter&apos;s Movie Night Reservationinator!</h1>
+<p className="text-base">Doors open April 1st at 6:30pm, movie starts at 7:00!</p>
 <p className="text-base .italic">Address: 6922 East Pass Apt 204</p>
                     <RSVP rsvped={rsvped} onRSVP={handleRSVP}>
                         {phoneNumber === "1234567890" ? 
