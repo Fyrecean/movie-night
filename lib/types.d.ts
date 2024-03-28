@@ -19,12 +19,13 @@ export interface IUser {
 
 export interface IWeekData {
     weekNumber: number;
+    allowVotes: boolean;
     users: IUser[];
 }
 
 interface IMovieRecommendation {
     movie: IMovie;
-    userHasVoted: boolean;
+    myVote: voteType | null;
     upvotes: number;
     downvotes: number;
 }
@@ -32,11 +33,10 @@ interface IMovieRecommendation {
 export interface IReservations {
     users: string[];
     movieRecommendations: IMovieRecommendation[];
-
 }
 
 export type voteType = 'up' | 'down';
 export interface IVote {
     movieId: number;
-    isAdd: boolean;
+    upOrDown: voteType;
 }

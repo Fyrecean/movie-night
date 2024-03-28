@@ -4,12 +4,14 @@ import { Children } from 'react';
 interface MovieProps {
     movie: IMovie;
     isSearch?: boolean;
+    winner?: boolean;
     children?: React.ReactNode;
 }
 
-export const Movie = ({ children, movie, isSearch }: MovieProps) => {
+export const Movie = ({ children, movie, isSearch, winner }: MovieProps) => {
     const hover = isSearch ? 'hover:bg-gray-800' : '';
-    const classes = `flex flex-row gap-4 w-full ${hover}`;
+    const winnerClasses = winner ? 'border border-gray-300 rounded-md' : '';
+    const classes = `flex flex-row gap-4 w-full p-1 ${hover} ${winnerClasses}`;
     return (<div className={classes}>
         <div>
             <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} style={{ width: '75px', height: 'auto' }} />

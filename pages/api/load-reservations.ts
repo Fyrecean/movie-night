@@ -1,7 +1,7 @@
 // api endpoint that responds with the rspvs from data/week-<weekNumber>.json, all the users in one list and all the movie recommendations in another list
 
 import { getCurrentWeekNumber, isValidPhoneNumber, readWeekData } from "@/lib/filing";
-import { IMovieRecommendation, IReservations } from "@/lib/types";
+import { IMovieRecommendation, IReservations, voteType } from "@/lib/types";
 import { parse } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,7 +15,7 @@ const loadReservations = async (req: NextApiRequest, res: NextApiResponse) => {
     const cookies = parse(req.headers.cookie || '');
     const phoneNumber = cookies['movie-night-session'];
 
-    if (!isValidPhoneNumber(phoneNumber)) {
+    if (!isValidPhoneNumber(phoneNumber)[0]) {
         return res.status(403).json({ error: 'Unauthorized' });
     }
 
@@ -29,12 +29,19 @@ const loadReservations = async (req: NextApiRequest, res: NextApiResponse) => {
         movieRecommendations: [],
     }
 
+
     weekData.users.forEach(user => {
         responseData.users.push(user.name);
+        let vote: voteType | null = null;
+        if (user.upvotes.includes(phoneNumber)) {
+            vote = 'up';
+        } else if (user.downvotes.includes(phoneNumber)) {
+            vote = 'down';
+        }
         if (user.movieRecommendation) {
             const rec: IMovieRecommendation = {
                 movie: user.movieRecommendation,
-                userHasVoted: user.upvotes.includes(phoneNumber),
+                myVote: vote,
                 upvotes: user.upvotes.length,
                 downvotes: user.downvotes.length,
             }

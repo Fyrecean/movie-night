@@ -3,9 +3,10 @@ import { useState } from "react";
 interface IRSVPProps {
     rsvped: boolean;
     onRSVP: (isAttending: boolean) => void;
+    children?: React.ReactNode;
 }
 
-export const RSVP = ({rsvped, onRSVP}: IRSVPProps) => {
+export const RSVP = ({rsvped, onRSVP, children}: IRSVPProps) => {
     const [hasResponded, setHasResponded] = useState(rsvped);
     const handleRSVP = async (isAttending: boolean) => {
         setHasResponded(true);
@@ -23,8 +24,6 @@ export const RSVP = ({rsvped, onRSVP}: IRSVPProps) => {
         onRSVP(isAttending);
     };
 
-    const neverMindclasses = `hover:scale-105 hover:shadow text-center border border-red-300 rounded-md border-gray-400 h-8 text-sm flex items-center gap-1 lg:gap-2`;
-
     return <>
     {hasResponded ? 
         <div className="flex flex-row gap-4">
@@ -40,6 +39,7 @@ export const RSVP = ({rsvped, onRSVP}: IRSVPProps) => {
                 >
                 X NeverMind
             </button>
+            {children}
         </div>
         : 
         <div className="flex space-x-4">
@@ -55,6 +55,7 @@ export const RSVP = ({rsvped, onRSVP}: IRSVPProps) => {
             >
                 Not Attending
             </button>
+            {children}
         </div>
         }
     </>;

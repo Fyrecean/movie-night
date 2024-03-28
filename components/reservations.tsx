@@ -5,19 +5,20 @@ import { Movie } from "./Movie";
 interface IReservationsProps {
     refreshReservations: () => Promise<void>;
     rsvped: boolean;
+    allowVotes: boolean;
     attendeeNames: string[];
     recommendations: IMovieRecommendation[];
 }
 
-export const Reservations = ({ refreshReservations, rsvped, attendeeNames, recommendations }: IReservationsProps) => {
-    const handleVote = async (movieId: number, isAdd: boolean) => {
+export const Reservations = ({ refreshReservations, rsvped, allowVotes, attendeeNames, recommendations }: IReservationsProps) => {
+    const handleVote = async (movieId: number, upOrDown: voteType) => {
         if (!rsvped) return;
         const response = await fetch('/api/vote', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ movieId: movieId, isAdd: isAdd } as IVote),
+            body: JSON.stringify({ movieId: movieId, upOrDown: upOrDown } as IVote),
         });
         if (response.ok) {
             refreshReservations();
@@ -29,26 +30,36 @@ export const Reservations = ({ refreshReservations, rsvped, attendeeNames, recom
     // return a list of attendees, then a table of movie recommendations where the first column is the movie poster, the second column is the move title, and the 3rd column is a button
 
     const areMoviesRecommended = recommendations.length > 0;
-    const movieListTitle = rsvped ? "Vote on this Week's Suggested Movies" : "This Week's Suggested Movies";
+    const highestVotes = Math.max(...recommendations.map(recommendation => recommendation.upvotes - recommendation.downvotes), 1);
+    const movieListTitle = rsvped && allowVotes ? "Vote on this Week's Suggested Movies" : "This Week's Suggested Movies";
     const attendeesTitle = "This Week's Attendees";
     return (
         <div>
-            <h1 className="text-xl font-bold">{attendeesTitle}</h1>
+            <h1 className="text-xl font-bold ">{attendeesTitle}</h1>
             <ul>
                 {attendeeNames.length === 0 ? <li>No attendees yet</li> : attendeesList}
             </ul>
             {areMoviesRecommended ? <>
                 <h1 className="text-xl font-bold">{movieListTitle}</h1>
-                {recommendations.map((recommendation) => (
-                    <Movie key={recommendation.movie.id} movie={recommendation.movie} >
-                        <div className="flex flex-row">
+                {rsvped && !allowVotes ? 
+                    <p className="text-base .italic">Voting on which movie we will watch will open Monday morning!</p>
+                : null}
+                {recommendations.map((recommendation, i) => (
+                    <Movie key={recommendation.movie.id} movie={recommendation.movie} winner={allowVotes && recommendation.upvotes - recommendation.downvotes >= highestVotes}>
+                        {allowVotes ? <div className="flex flex-row">
                             <VoteButton
                                 disabled={!rsvped}
                                 type='up'
                                 count={recommendation.upvotes}
-                                highlight={recommendation.userHasVoted}
-                                onClick={() => handleVote(recommendation.movie.id, !recommendation.userHasVoted)} />
-                        </div>
+                                highlight={recommendation.myVote === 'up'}
+                                onClick={() => handleVote(recommendation.movie.id, 'up')} />
+                            <VoteButton
+                                disabled={!rsvped}
+                                type='down'
+                                count={recommendation.downvotes}
+                                highlight={recommendation.myVote === 'down'}
+                                onClick={() => handleVote(recommendation.movie.id, 'down')} />
+                        </div> : null}
                     </Movie>
                 ))}
             </>
