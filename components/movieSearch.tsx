@@ -37,8 +37,9 @@ export const MovieSearch = ({refreshReservations}: IMovieSearchProps) => {
     };
 
     return (
-        <div>
+        <div className="h-dvh">
             <h1 className="text-xl font-bold">Suggest a Movie</h1>
+            <p className="text-base">Each person can suggest one movie. You can replace your suggestion at any time.</p>
             <input
                 type="text"
                 placeholder="Search for a movie..."
@@ -47,9 +48,9 @@ export const MovieSearch = ({refreshReservations}: IMovieSearchProps) => {
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 m-2"
             />
             <ul>
-                {results.map((movie) => (
+                {query.length > 0 ? results.map((movie) => (
                     <MovieListItem key={movie.id} movie={movie} onSelectMovie={handleSelectMovie} />
-                ))}
+                )): null}
             </ul>
         </div>
     );

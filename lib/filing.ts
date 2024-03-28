@@ -25,8 +25,16 @@ export const isValidPhoneNumber = (phoneNumber: string): [boolean, string] => {
 // Return whether the phone number is in weekData.users
 export const isUserRSVPed = async (phoneNumber: string) => {
     const weekNumber = getCurrentWeekNumber();
-    const weekData = await readWeekData(weekNumber, false) || { weekNumber, users: [] };
+    const weekData = await readWeekData(weekNumber, false) || { weekNumber, allowVotes: false, users: [] };
     return weekData.users.some(user => user.phoneNumber === phoneNumber);
+}
+
+export const getRSVP = async (phoneNumber: string): Promise<[boolean, boolean]> => {
+    const weekNumber = getCurrentWeekNumber();
+    const weekData = await readWeekData(weekNumber, false) || { weekNumber, allowVotes: false, users: [] };
+    const isRSVPed = weekData.users.some(user => user.phoneNumber === phoneNumber);
+    const allowVotes = weekData.allowVotes;
+    return [isRSVPed, allowVotes];
 }
 
 // Return a the current week number, incrementing on mondays since 2/19/2024  (week 1)
@@ -53,7 +61,7 @@ export const readWeekData = async (weekNumber: number, lock: boolean): Promise<I
             fs.writeFileSync(lockFilePath, ''); // Create an empty lock file
         }
         if (!fs.existsSync(filePath)) {
-            const data = { weekNumber: weekNumber, users: []}
+            const data = { weekNumber: weekNumber, allowVotes: false, users: []}
             fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
         }
         const fileContents = fs.readFileSync(filePath, 'utf8');

@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { serialize } from 'cookie';
-import { isUserRSVPed, isValidPhoneNumber } from '@/lib/filing';
+import { getRSVP, isUserRSVPed, isValidPhoneNumber } from '@/lib/filing';
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const { phoneNumber } = req.body;
@@ -23,7 +23,8 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   res.setHeader('Set-Cookie', serialized);
-  const body = { name: name, isRsvped: await isUserRSVPed(phoneNumber)};
+  const [rsvped, allowVotes] = await getRSVP(phoneNumber);
+  const body = { name: name, isRsvped: rsvped, allowVotes: allowVotes};
   res.status(200).json(body);
 };
 

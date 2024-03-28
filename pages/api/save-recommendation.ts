@@ -3,7 +3,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ensureDataDirectory, getCurrentWeekNumber, isValidPhoneNumber, readWeekData, writeWeekData } from '@/lib/filing';
 import { parse } from 'cookie';
-import { scopedCssBaselineClasses } from '@mui/material';
 
 const saveRecommendation = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST') {
@@ -15,7 +14,7 @@ const saveRecommendation = async (req: NextApiRequest, res: NextApiResponse) => 
     const cookies = parse(req.headers.cookie || '');
     const phoneNumber = cookies['movie-night-session'];
 
-    if (!isValidPhoneNumber(phoneNumber)) {
+    if (!isValidPhoneNumber(phoneNumber)[0]) {
         return res.status(403).json({ error: 'Unauthorized' });
     }
 
@@ -23,7 +22,7 @@ const saveRecommendation = async (req: NextApiRequest, res: NextApiResponse) => 
 
     ensureDataDirectory();
     const weekNumber = getCurrentWeekNumber();
-    let weekData = await readWeekData(weekNumber, true) || { weekNumber, users: [] };
+    let weekData = await readWeekData(weekNumber, true) || { weekNumber, allowVotes: false, users: [] };
 
     const userIndex = weekData.users.findIndex(user => user.phoneNumber === phoneNumber);
 

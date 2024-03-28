@@ -13,6 +13,7 @@ const Home = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [name, setName] = useState('');
     const [rsvped, setRsvped] = useState(false);
+    const [allowVotes, setAllowVotes] = useState(false);
 
     const [attendeeNames, setAttendeeNames] = useState<string[]>([]);
     const [recommendations, setRecommendations] = useState<IMovieRecommendation[]>([]);
@@ -46,6 +47,7 @@ const Home = () => {
                 setPhoneNumber(phoneNumber);
                 setName(data.name);
                 setRsvped(data.isRsvped);
+                setAllowVotes(data.allowVotes);
             });
         };
     }, [name]);
@@ -60,17 +62,44 @@ const Home = () => {
         fetchReservations();
     }
 
+    const handleToggleVote = async () => {
+        fetch('/api/toggle-votes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return Promise.reject();
+            }
+            return response.json()
+        })
+        .then(data =>{
+            fetchReservations();
+            setPhoneNumber(phoneNumber);
+            setName(data.name);
+            setRsvped(data.isRsvped);
+            setAllowVotes(data.allowVotes);
+        });
+    }
+
     return (
         <div className="container mx-auto">
             {!phoneNumber ? <Login onLogin={handleLogin}/> :
                 <div>
-                    <h1 className="text-xl font-bold">Welcome, {name}, to the Movie Night Reservationinator!</h1>
-<p className="text-base">Doors open at 6:30 every Monday through April 1st.</p>
-<p className="text-base">Movie starts at 7:00!</p>
+                    <h1 className="text-xl font-bold">Welcome, {name}, to Carter's Movie Night Reservationinator!</h1>
+<p className="text-base">Come April 1st to movie night.</p>
+<p className="text-base">Doors open at 6:30, movie starts at 7:00!</p>
 <p className="text-base .italic">Address: 6922 East Pass Apt 204</p>
-                    <RSVP rsvped={rsvped} onRSVP={handleRSVP}/>
+                    <RSVP rsvped={rsvped} onRSVP={handleRSVP}>
+                        {phoneNumber === "1234567890" ? 
+                            <button className="px-4 py-2 hover:scale-105 hover:shadow text-center border border-blue-300 rounded-md border-gray-400 h-8 text-sm flex items-center gap-2 lg:gap-2" onClick={handleToggleVote}>Toggle Vote</button> 
+                            : null}
+                    </RSVP>
                     <Reservations
                         refreshReservations={fetchReservations} 
+                        allowVotes={allowVotes}
                         attendeeNames={attendeeNames}
                         recommendations={recommendations} 
                         rsvped={rsvped}/>

@@ -24,7 +24,7 @@ const rsvp = async (req: NextApiRequest, res: NextApiResponse) => {
 
     ensureDataDirectory();
     const weekNumber = getCurrentWeekNumber();
-    let weekData = await readWeekData(weekNumber, true) || { weekNumber, users: [] };
+    let weekData = await readWeekData(weekNumber, true) || { weekNumber, allowVotes: false, users: [] };
 
     const userIndex = weekData.users.findIndex(user => user.phoneNumber === phoneNumber);
 
