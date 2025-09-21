@@ -90,7 +90,7 @@ const Home = () => {
                 <div>
                     <h1 className="text-xl font-bold">Welcome, {name}, to Carter&apos;s Movie Night Reservationinator!</h1>
 <p className="text-base">Doors open April 1st at 6:30pm, movie starts at 7:00!</p>
-<p className="text-base .italic">Address: 6922 East Pass Apt 204</p>
+<p className="text-base .italic">Address: ----</p>
                     <RSVP rsvped={rsvped} onRSVP={handleRSVP}>
                         {phoneNumber === "1234567890" ? 
                             <button className="px-4 py-2 hover:scale-105 hover:shadow text-center border border-blue-300 rounded-md border-gray-400 h-8 text-sm flex items-center gap-2 lg:gap-2" onClick={handleToggleVote}>Toggle Vote</button> 
